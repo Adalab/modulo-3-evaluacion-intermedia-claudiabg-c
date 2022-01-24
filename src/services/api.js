@@ -6,6 +6,7 @@ const callToApi = () => {
     .then((response) => {
       const result = response.results.map((student) => {
         return {
+          id: student.id,
           name: student.name,
           tutor: student.counselor,
           specialty: student.speciality,

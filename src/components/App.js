@@ -11,6 +11,7 @@ function App() {
   });
   const [newStudent, setNewStudent] = useState([]);
   const [searchStudent, setSearchStudent] = useState("");
+  const [searchTutor, setSearchTutor] = useState("");
 
   useEffect(() => {
     callToApi().then((response) => {
@@ -51,27 +52,47 @@ function App() {
   };
 
   const handleSelect = (ev) => {
-    const tutorData = ev.target.name;
-    setStudents({
-      ...students,
-      [tutorData]: ev.target.value,
-    });
+    const tutorData = ev.currentTarget.value;
+    setSearchTutor(tutorData);
   };
 
+  const renderStudentsSelect = students
+    .filter((student) => {
+      return student.tutor
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .includes(`${searchTutor}`);
+    })
+    .map((student) => {
+      return (
+        <tr key={student.id}>
+          <td>{student.name}</td>
+          <td>{student.tutor}</td>
+          <td>{student.specialty}</td>
+        </tr>
+      );
+    });
+
   const renderStudents = () => {
-    return students
-      .filter((student) => {
-        return student.name.toLowerCase().includes(searchStudent.toLowerCase());
-      })
-      .map((student, index) => {
-        return (
-          <tr key={index}>
-            <td>{student.name}</td>
-            <td>{student.tutor}</td>
-            <td>{student.specialty}</td>
-          </tr>
-        );
-      });
+    if (searchTutor === "select") {
+      return students
+        .filter((student) => {
+          return student.name
+            .toLowerCase()
+            .includes(searchStudent.toLowerCase());
+        })
+
+        .map((student) => {
+          return (
+            <tr key={student.id}>
+              <td>{student.name}</td>
+              <td>{student.tutor}</td>
+              <td>{student.specialty}</td>
+            </tr>
+          );
+        });
+    }
   };
 
   const renderNewStudents = () => {
@@ -82,9 +103,16 @@ function App() {
       .map((student, index) => {
         return (
           <tr key={index}>
-            <td>{student.name}</td>
-            <td>{student.tutor}</td>
-            <td>{student.specialty}</td>
+            <td>
+              {student.name.charAt(0).toUpperCase() + student.name.slice(1)}
+            </td>
+            <td>
+              {student.tutor.charAt(0).toUpperCase() + student.tutor.slice(1)}
+            </td>
+            <td>
+              {student.specialty.charAt(0).toUpperCase() +
+                student.specialty.slice(1)}
+            </td>
           </tr>
         );
       });
@@ -100,16 +128,14 @@ function App() {
           placeholder="Ej: MariCarmen"
           onChange={handleInputSearch}
         />
-        <label>Escoge una tutora: </label>
+        <label>Escoge un tutor: </label>
         <select
           name="select"
           id="select"
           defaultValue="select"
           onChange={handleSelect}
         >
-          <option value="select" disabled>
-            Escoge una opción
-          </option>
+          <option value="select">Todos los tutores</option>
           <option value="yanelis">Yanelis</option>
           <option value="dayana">Dayana</option>
           <option value="ivan">Iván</option>
@@ -126,6 +152,7 @@ function App() {
         </thead>
         <tbody>{renderStudents()}</tbody>
         <tbody>{renderNewStudents()}</tbody>
+        <tbody>{renderStudentsSelect}</tbody>
       </table>
       <form onSubmit={(ev) => ev.preventDefault()}>
         <h2>Añadir una adalaber</h2>
