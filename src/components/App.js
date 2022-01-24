@@ -27,8 +27,6 @@ function App() {
     });
   };
 
-  console.log(students);
-
   const handleAddBtn = () => {
     if (
       newStudentInput.name !== "" &&
@@ -72,9 +70,11 @@ function App() {
           <td>{student.name}</td>
           <td>{student.tutor}</td>
           <td>{student.specialty}</td>
-          <td>
-            {student.social.map((eachData) => (
-              <a href={eachData.url}>{eachData.name}</a>
+          <td className="socialMedia">
+            {student.social.map((eachData, index) => (
+              <a className="link" key={index} href={eachData.url}>
+                {eachData.name}
+              </a>
             ))}
           </td>
         </tr>
@@ -127,16 +127,18 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Adalabers</h1>
-      <form onSubmit={(ev) => ev.preventDefault()}>
+      <h1 className="title">Adalabers</h1>
+      <form className="form" onSubmit={(ev) => ev.preventDefault()}>
         <label>Nombre: </label>
         <input
+          className="select"
           type="text"
           placeholder="Ej: MariCarmen"
           onChange={handleInputSearch}
         />
         <label>Escoge un tutor: </label>
         <select
+          className="select"
           name="select"
           id="select"
           defaultValue="select"
@@ -162,10 +164,11 @@ function App() {
         <tbody>{renderNewStudents()}</tbody>
         <tbody>{renderStudentsSelect}</tbody>
       </table>
-      <form onSubmit={(ev) => ev.preventDefault()}>
-        <h2>Añadir una adalaber</h2>
+      <form className="form" onSubmit={(ev) => ev.preventDefault()}>
+        <h2 className="title">Añadir una adalaber</h2>
         <label>Nombre:</label>
         <input
+          className="select"
           type="text"
           name="name"
           value={newStudentInput.name}
@@ -173,6 +176,7 @@ function App() {
         />
         <label>Tutor/a:</label>
         <input
+          className="select"
           type="text"
           name="tutor"
           value={newStudentInput.tutor}
@@ -180,12 +184,15 @@ function App() {
         />
         <label>Especialidad:</label>
         <input
+          className="select"
           type="text"
           name="specialty"
           value={newStudentInput.specialty}
           onChange={handleInput}
         />
-        <button onClick={handleAddBtn}>Añadir nueva adalaber</button>
+        <button className="button" onClick={handleAddBtn}>
+          Añadir nueva adalaber
+        </button>
       </form>
     </div>
   );
