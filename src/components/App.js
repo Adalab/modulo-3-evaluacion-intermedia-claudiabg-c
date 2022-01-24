@@ -27,6 +27,8 @@ function App() {
     });
   };
 
+  console.log(students);
+
   const handleAddBtn = () => {
     if (
       newStudentInput.name !== "" &&
@@ -70,6 +72,11 @@ function App() {
           <td>{student.name}</td>
           <td>{student.tutor}</td>
           <td>{student.specialty}</td>
+          <td>
+            {student.social.map((eachData) => (
+              <a href={eachData.url}>{eachData.name}</a>
+            ))}
+          </td>
         </tr>
       );
     });
@@ -148,6 +155,7 @@ function App() {
             <th>Nombre</th>
             <th>Tutor/a</th>
             <th>Especialidad</th>
+            <th>Redes sociales</th>
           </tr>
         </thead>
         <tbody>{renderStudents()}</tbody>
